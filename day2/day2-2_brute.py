@@ -23,8 +23,6 @@ for length in range(2, max_len + 1):
             continue
         for start, end in all_ranges:
             if start <= whole_num <= end:
-                if whole_num == 666:
-                    print(start, end, length)
                 total += whole_num
                 all_valid.add(whole_num)
                 break

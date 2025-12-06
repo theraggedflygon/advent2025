@@ -53,9 +53,3 @@ for REPEAT_COUNT in range(2, global_max_len + 1):
             target_length += REPEAT_COUNT
 
 print(total)
-
-al_list = list(all_valid)
-al_list.sort()
-with open("test.txt", 'a') as file:
-    file.write("\n")
-    file.write(str(al_list))
