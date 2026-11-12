@@ -1,26 +1,4 @@
-import sys
-
-sys.setrecursionlimit(10000)
-
-
-def press_buttons(state, buttons, counter, goal):
-    state_str = str(state)
-    for i in range(len(state)):
-        if state[i] > goal[i]:
-            return
-    if state_str not in RECORDS:
-        RECORDS[state_str] = counter
-    elif counter >= RECORDS[state_str] or (
-        str(goal) in RECORDS and RECORDS[str(goal)] < counter
-    ):
-        return
-    RECORDS[state_str] = counter
-    for button in buttons:
-        new_state = state.copy()
-        for idx in button:
-            new_state[idx] += 1
-        press_buttons(new_state, buttons, counter + 1, goal)
-
+from scipy.optimize import linprog
 
 with open("day10_input.txt", "r") as file:
     data = file.read().split("\n")
@@ -34,15 +12,27 @@ for idx, row in enumerate(data):
         [int(num) for num in button.strip()[:-1].split(",")]
         for button in row.split("]")[1].split("{")[0].strip().split("(")[1:]
     ]
+    button_matrix = []
+    for light in range(len(goal)):
+        button_row = []
+        for button in buttons:
+            if light in button:
+                button_row.append(1)
+            else:
+                button_row.append(0)
+        button_matrix.append(button_row)
 
-    RECORDS = {}
-    press_buttons([0 for _ in range(len(goal))], buttons, 0, goal)
-    print(RECORDS[str(goal)])
-    total += RECORDS[str(goal)]
-    print(len(RECORDS), "RECORDS len")
-    with open("output.txt", "w") as file:
-        for record in RECORDS:
-            file.write(f"{record}, {RECORDS[record]}\n")
-    exit()
+    c = [1 for _ in range(len(buttons))]
+
+    result = linprog(c, A_eq=button_matrix, b_eq=goal, integrality=c)
+    total += int(result.fun)
 
 print(total)
+
+# A = [[0, 0, 0, 0, 1, 1], [0, 1, 0, 0, 0, 1], [0, 0, 1, 1, 1, 0], [1, 1, 0, 1, 0, 0]]
+# b = [3, 5, 4, 7]
+
+# c = [1, 1, 1, 1, 1, 1]
+
+# result = linprog(c, A_eq=A, b_eq=b)
+# print(result.fun)
