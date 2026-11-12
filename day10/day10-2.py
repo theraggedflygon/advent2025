@@ -6,7 +6,6 @@ with open("day10_input.txt", "r") as file:
 
 total = 0
 for idx, row in enumerate(data):
-    print(idx)
     goal = [int(num) for num in row.split("{")[1][:-1].split(",")]
     buttons = [
         [int(num) for num in button.strip()[:-1].split(",")]
@@ -28,11 +27,3 @@ for idx, row in enumerate(data):
     total += int(result.fun)
 
 print(total)
-
-# A = [[0, 0, 0, 0, 1, 1], [0, 1, 0, 0, 0, 1], [0, 0, 1, 1, 1, 0], [1, 1, 0, 1, 0, 0]]
-# b = [3, 5, 4, 7]
-
-# c = [1, 1, 1, 1, 1, 1]
-
-# result = linprog(c, A_eq=A, b_eq=b)
-# print(result.fun)
